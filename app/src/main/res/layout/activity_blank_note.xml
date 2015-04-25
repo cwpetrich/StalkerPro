@@ -42,14 +42,14 @@
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Save To DB"
+            android:text="Save DB"
             android:id="@+id/blankNoteSaveButton" />
 
         <Button
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Save To P"
+            android:text="Save P"
             android:id="@+id/blankNoteAssociateButton" />
     </LinearLayout>
 
