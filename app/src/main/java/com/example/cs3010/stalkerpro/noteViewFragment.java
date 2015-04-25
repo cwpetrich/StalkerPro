@@ -36,21 +36,34 @@ public class noteViewFragment extends Fragment {
                 EditText e = (EditText)getView().findViewById(R.id.editNoteData);
                 TextView t = (TextView)getView().findViewById(R.id.noteData);
                 Button b = (Button)getView().findViewById(R.id.editButton);
+                Button more = (Button)getView().findViewById(R.id.moreButton);
                 if(e.getVisibility()==View.GONE){
                     e.setText(t.getText());
                     e.setVisibility(View.VISIBLE);
                     t.setVisibility(View.GONE);
                     b.setText("Save");
+                    more.setVisibility(View.VISIBLE);
                 }
                 else{
                     t.setText(e.getText());
                     t.setVisibility(View.VISIBLE);
                     e.setVisibility(View.GONE);
+                    more.setVisibility(View.GONE);
                     b.setText("Edit");
                 }
 
             }
         });
+
+        Button more = (Button)view.findViewById(R.id.moreButton);
+        more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
         return view;
     }
 
