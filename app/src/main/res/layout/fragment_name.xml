@@ -6,10 +6,11 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
         android:text="New Button"
         android:id="@+id/namePlace"
-        android:layout_gravity="center_horizontal|top" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="center_horizontal" />
 
 </RelativeLayout>

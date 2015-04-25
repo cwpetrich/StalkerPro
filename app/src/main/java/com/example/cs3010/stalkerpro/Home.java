@@ -11,9 +11,12 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class Home extends ActionBarActivity {
     public static Home main;
+    private static NoteDatabaseAdapter DB;
 
     public static Home getMain(){return main;}
 
@@ -21,19 +24,35 @@ public class Home extends ActionBarActivity {
         Toast.makeText(main.getApplicationContext(), st, Toast.LENGTH_LONG).show();
     }
 
+    private void updateView(){
+        LinearLayout ll = (LinearLayout) findViewById(R.id.namesContainer);
+        ll.removeAllViews();
+        ArrayList<Person> list = DB.getPeople();
+        FragmentManager fm = main.getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        for(int i =0;i<list.size();i++){
+            nameFragment nf = new nameFragment();
+            nf.setName(list.get(i).name);
+            nf.setPuuid(list.get(i).puuid);
+            ft.add(R.id.namesContainer,nf);
+        }
+        ft.commit();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         main = this;
+        DB = new NoteDatabaseAdapter(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        LinearLayout ll = (LinearLayout) this.findViewById(R.id.namesContainer);
-        FragmentManager fm = getFragmentManager();
+        updateView();
+        /*FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         nameFragment nf = new nameFragment();
         nf.setName("bob");
         ft.add(R.id.namesContainer,nf);
-        ft.commit();
+        ft.commit();*/
     }
 
 
@@ -54,6 +73,13 @@ public class Home extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == R.id.action_newPerson){
+            Person p = new Person();
+            p.name = "bob";
+            DB.insertPerson(p);
+            updateView();
         }
 
         return super.onOptionsItemSelected(item);
