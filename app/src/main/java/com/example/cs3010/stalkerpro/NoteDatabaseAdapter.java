@@ -64,9 +64,14 @@ public class NoteDatabaseAdapter {
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
         String[] whereArgs = {String.valueOf(puuid)};
+<<<<<<< HEAD
         int pcount = db.delete(DatabaseSchema.PEOPLE_TABLE_NAME, DatabaseSchema.puuid + " =?", whereArgs);
         int ncount = db.delete(DatabaseSchema.NOTES_TABLE_NAME, DatabaseSchema.puuid + " =?",whereArgs);
         return pcount+ncount;
+=======
+        int count = db.delete(DatabaseSchema.PEOPLE_TABLE_NAME, DatabaseSchema.puuid+" =?",whereArgs);
+        return count;
+>>>>>>> tyler
     }
 
     public ArrayList<Note> getNotes()
