@@ -91,6 +91,10 @@ public class Home extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_quickNote) {
+            Intent intent = new Intent(this, CreateNote.class);
+            startActivity(intent);
+        }
 
         if (id == R.id.action_newPerson){
             LinearLayout ll = (LinearLayout) findViewById(R.id.newNameContainer);
