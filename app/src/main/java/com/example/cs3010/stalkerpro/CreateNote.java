@@ -64,6 +64,8 @@ public class CreateNote extends ActionBarActivity {
                 {
                     TextView tv = new TextView(context);
                     tv.setText(mPeople.get(i).name);
+                    tv.setTextSize((float) 25.0);
+                    tv.setPadding(0, 0, 0, 5);
                     searchResults.addView(tv);
                 }
             }
