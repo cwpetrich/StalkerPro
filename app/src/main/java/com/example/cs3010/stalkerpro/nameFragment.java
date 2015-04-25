@@ -11,9 +11,12 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.util.UUID;
+
 
 public class nameFragment extends Fragment {
     String name;
+    private UUID puuid;
 
     public nameFragment() {
         // Required empty public constructor
@@ -28,6 +31,7 @@ public class nameFragment extends Fragment {
     public void setName(String n){
         name = n;
     }
+    public void setPuuid(UUID u){puuid = u;}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
