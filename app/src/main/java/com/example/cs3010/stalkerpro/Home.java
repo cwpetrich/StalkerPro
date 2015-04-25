@@ -55,6 +55,10 @@ public class Home extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_quickNote) {
+            Intent intent = new Intent(this, BlankNote.class);
+            startActivity(intent);
+        }
 
         return super.onOptionsItemSelected(item);
     }
