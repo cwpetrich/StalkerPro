@@ -1,11 +1,17 @@
 package com.example.cs3010.stalkerpro;
 
+import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.security.GeneralSecurityException;
 import java.util.UUID;
 
 
@@ -19,11 +25,17 @@ public class ViewNotes extends ActionBarActivity {
         Bundle b = getIntent().getExtras();
         String value = b.getString("uuid");
         puuid = UUID.fromString(value);
-        TextView name =(TextView) findViewById(R.id.notesOwner);
+        //TextView name =(TextView) findViewById(R.id.notesOwner);
         String n = b.getString("name");
-        name.setText(n);
-        NoteDatabaseAdapter db = Home.getDatabase();
+        setTitle(n);
 
+        //name.setText(n);
+        NoteDatabaseAdapter db = Home.getDatabase();
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        noteViewFragment nv = new noteViewFragment();
+        ft.add(R.id.notesContainer,nv);
+        ft.commit();
     }
 
 
@@ -42,8 +54,17 @@ public class ViewNotes extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_delete_person) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to delete this person?")
+                    .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Home.getDatabase().deletePersonRow(puuid);
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("Nevermind",null).show();
         }
 
         return super.onOptionsItemSelected(item);
