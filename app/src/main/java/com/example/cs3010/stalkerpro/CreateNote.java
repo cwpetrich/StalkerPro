@@ -5,17 +5,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class CreateNote extends ActionBarActivity {
 
     Note mNote;
+    ArrayList<Person> mPeople;
     EditText noteText;
+    EditText searchText;
     NoteDatabaseAdapter databaseAdapter;
     Context context = this;
 
@@ -31,9 +38,7 @@ public class CreateNote extends ActionBarActivity {
         noteText = (EditText) findViewById(R.id.createNoteEditText);
         noteText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -42,9 +47,31 @@ public class CreateNote extends ActionBarActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
+            public void afterTextChanged(Editable s) {}
+        });
 
+        searchText = (EditText) findViewById(R.id.createNoteSearchBox);
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mPeople = databaseAdapter.getPeople(s.toString());
+                LinearLayout searchResults = (LinearLayout) findViewById(R.id.createNoteSearchResultsList);
+                searchResults.removeAllViews();
+                for (int i = 0; i < mPeople.size(); i++)
+                {
+                    TextView tv = new TextView(context);
+                    tv.setText(mPeople.get(i).name);
+                    tv.setTextSize((float) 25.0);
+                    tv.setPadding(0, 0, 0, 5);
+                    searchResults.addView(tv);
+                }
             }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
         });
     }
 
