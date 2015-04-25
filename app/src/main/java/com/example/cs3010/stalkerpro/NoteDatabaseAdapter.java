@@ -107,6 +107,27 @@ public class NoteDatabaseAdapter {
         return note;
     }
 
+    public ArrayList<Person> getPeople(String name)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.puuid, DatabaseSchema.name,
+                DatabaseSchema.created_at, DatabaseSchema.modified_at};
+        String[] whereArgs = {name+"%"};
+        Cursor cursor = db.query(DatabaseSchema.PEOPLE_TABLE_NAME, columns, DatabaseSchema.name + " LIKE ?", whereArgs, null, null, null);
+        ArrayList<Person> people = new ArrayList<>();
+        while(cursor.moveToNext())
+        {
+            Person person = new Person();
+            person.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+            person.name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.name));
+            person.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+            person.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+            people.add(person);
+        }
+        return people;
+    }
+
+
     public ArrayList<Person> getPeople()
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
