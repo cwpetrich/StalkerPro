@@ -47,7 +47,8 @@ public class nameFragment extends Fragment {
                 b.putString("uuid",puuid.toString());
                 b.putString("name",name);
                 intent.putExtras(b);
-                startActivity(intent);
+                getActivity().startActivityForResult(intent,1);
+
             }
         });
         // Inflate the layout for this fragment
