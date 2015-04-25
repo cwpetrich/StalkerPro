@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BlankNote"
+            android:name=".CreateNote"
             android:label="@string/title_activity_blank_note" >
         </activity>
     </application>

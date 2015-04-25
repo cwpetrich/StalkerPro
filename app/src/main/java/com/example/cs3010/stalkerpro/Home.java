@@ -56,7 +56,7 @@ public class Home extends ActionBarActivity {
             return true;
         }
         if (id == R.id.action_quickNote) {
-            Intent intent = new Intent(this, BlankNote.class);
+            Intent intent = new Intent(this, CreateNote.class);
             startActivity(intent);
         }
 
