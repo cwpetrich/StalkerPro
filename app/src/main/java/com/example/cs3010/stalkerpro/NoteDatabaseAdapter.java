@@ -3,11 +3,14 @@ package com.example.cs3010.stalkerpro;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import java.security.GeneralSecurityException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -61,8 +64,9 @@ public class NoteDatabaseAdapter {
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
         String[] whereArgs = {String.valueOf(puuid)};
-        int count = db.delete(DatabaseSchema.PEOPLE_TABLE_NAME, DatabaseSchema.nuuid+" =?",whereArgs);
-        return count;
+        int pcount = db.delete(DatabaseSchema.PEOPLE_TABLE_NAME, DatabaseSchema.puuid + " =?", whereArgs);
+        int ncount = db.delete(DatabaseSchema.NOTES_TABLE_NAME, DatabaseSchema.puuid + " =?",whereArgs);
+        return pcount+ncount;
     }
 
     public ArrayList<Note> getNotes()
@@ -85,29 +89,44 @@ public class NoteDatabaseAdapter {
         return notes;
     }
 
-    public String getNoteData(UUID nuuid)
+    public Note getNote(UUID nuuid)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
-        String[] columns = {DatabaseSchema.id, DatabaseSchema.nuuid, DatabaseSchema.puuid,
-                DatabaseSchema.name, DatabaseSchema.created_at, DatabaseSchema.modified_at};
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.nuuid, DatabaseSchema.puuid, DatabaseSchema.note,
+                DatabaseSchema.created_at, DatabaseSchema.modified_at};
         String[] whereArgs = {String.valueOf(nuuid)};
-        Cursor cursor = db.query(DatabaseSchema.NOTES_TABLE_NAME, columns, DatabaseSchema.nuuid+" =?", whereArgs, null, null, null);
-        StringBuffer buffer = new StringBuffer();
+        Cursor cursor = db.query(DatabaseSchema.NOTES_TABLE_NAME, columns, DatabaseSchema.nuuid + " =?", whereArgs, null, null, null);
+        Note note = new Note();
+        while (cursor.moveToNext()) {
+            note.nuuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.nuuid)));
+            note.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+            note.note = cursor.getString(cursor.getColumnIndex(DatabaseSchema.note));
+            note.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+            note.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+        }
+        return note;
+    }
+
+    public ArrayList<Person> getPeople(String name)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.puuid, DatabaseSchema.name,
+                DatabaseSchema.created_at, DatabaseSchema.modified_at};
+        String[] whereArgs = {name+"%"};
+        Cursor cursor = db.query(DatabaseSchema.PEOPLE_TABLE_NAME, columns, DatabaseSchema.name + " LIKE ?", whereArgs, null, null, null);
+        ArrayList<Person> people = new ArrayList<>();
         while(cursor.moveToNext())
         {
-            String n_uuid = cursor.getString(cursor.getColumnIndex(DatabaseSchema.nuuid));
-            String p_uuid = cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid));
-            String name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.name));
-            String create_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
-            String modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
-            buffer.append(n_uuid + "\n" +
-                    p_uuid + "\n" +
-                    name + "\n" +
-                    create_at + "\n" +
-                    modified_at);
+            Person person = new Person();
+            person.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+            person.name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.name));
+            person.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+            person.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+            people.add(person);
         }
-        return buffer.toString();
+        return people;
     }
+
 
     public ArrayList<Person> getPeople()
     {

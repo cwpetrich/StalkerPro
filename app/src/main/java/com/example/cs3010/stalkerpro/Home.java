@@ -11,29 +11,66 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class Home extends ActionBarActivity {
     public static Home main;
+    private static NoteDatabaseAdapter DB;
+
+    public static NoteDatabaseAdapter getDatabase(){
+        return DB;
+    }
 
     public static Home getMain(){return main;}
+
+    public static void clearNewNameArea(){
+        LinearLayout ll = (LinearLayout) main.findViewById(R.id.newNameContainer);
+        ll.removeAllViews();
+
+    }
+
+    public static void addNewName(String name){
+        clearNewNameArea();
+        Person p = new Person();
+        p.name = name;
+        DB.insertPerson(p);
+        main.updateView();
+    }
 
     public static void makeToast(String st){
         Toast.makeText(main.getApplicationContext(), st, Toast.LENGTH_LONG).show();
     }
 
+    private void updateView(){
+        LinearLayout ll = (LinearLayout) findViewById(R.id.namesContainer);
+        ll.removeAllViews();
+        ArrayList<Person> list = DB.getPeople();
+        FragmentManager fm = main.getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        for(int i =0;i<list.size();i++){
+            nameFragment nf = new nameFragment();
+            nf.setName(list.get(i).name);
+            nf.setPuuid(list.get(i).puuid);
+            ft.add(R.id.namesContainer,nf);
+        }
+        ft.commit();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         main = this;
+        DB = new NoteDatabaseAdapter(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        LinearLayout ll = (LinearLayout) this.findViewById(R.id.namesContainer);
-        FragmentManager fm = getFragmentManager();
+        updateView();
+        /*FragmentManager fm = getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         nameFragment nf = new nameFragment();
         nf.setName("bob");
         ft.add(R.id.namesContainer,nf);
-        ft.commit();
+        ft.commit();*/
     }
 
 
@@ -55,7 +92,28 @@ public class Home extends ActionBarActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_quickNote) {
+            Intent intent = new Intent(this, CreateNote.class);
+            startActivity(intent);
+        }
+
+        if (id == R.id.action_newPerson){
+            LinearLayout ll = (LinearLayout) findViewById(R.id.newNameContainer);
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            NewPersonFragment np = new NewPersonFragment();
+            ft.add(R.id.newNameContainer,np);
+            ft.commit();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==1){
+            updateView();
+        }
     }
 }
