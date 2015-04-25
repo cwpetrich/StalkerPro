@@ -31,6 +31,7 @@ public class Home extends ActionBarActivity {
     }
 
     public static void addNewName(String name){
+        clearNewNameArea();
         Person p = new Person();
         p.name = name;
         DB.insertPerson(p);
@@ -106,5 +107,13 @@ public class Home extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==1){
+            updateView();
+        }
     }
 }

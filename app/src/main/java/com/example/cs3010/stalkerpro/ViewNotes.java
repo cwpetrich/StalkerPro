@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -61,6 +62,7 @@ public class ViewNotes extends ActionBarActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Home.getDatabase().deletePersonRow(puuid);
+                            setResult(1);
                             finish();
                         }
                     })
@@ -68,5 +70,13 @@ public class ViewNotes extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed(){
+        super.onBackPressed();
+        Intent returnIntent = new Intent();
+        setResult(RESULT_CANCELED, returnIntent);
+        finish();
     }
 }
