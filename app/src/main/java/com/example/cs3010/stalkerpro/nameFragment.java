@@ -1,6 +1,7 @@
 package com.example.cs3010.stalkerpro;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -41,8 +42,12 @@ public class nameFragment extends Fragment {
         namePlace.setText(name);
         namePlace.setOnClickListener( new View.OnClickListener(){
             public void onClick(View v){
-                Home.makeToast("bob was clicked");
-
+                Intent intent = new Intent(Home.getMain(), ViewNotes.class);
+                Bundle b = new Bundle();
+                b.putString("uuid",puuid.toString());
+                b.putString("name",name);
+                intent.putExtras(b);
+                startActivity(intent);
             }
         });
         // Inflate the layout for this fragment

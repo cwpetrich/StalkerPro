@@ -18,6 +18,10 @@ public class Home extends ActionBarActivity {
     public static Home main;
     private static NoteDatabaseAdapter DB;
 
+    public static NoteDatabaseAdapter getDatabase(){
+        return DB;
+    }
+
     public static Home getMain(){return main;}
 
     public static void clearNewNameArea(){
