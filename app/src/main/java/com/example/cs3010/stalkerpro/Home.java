@@ -20,6 +20,19 @@ public class Home extends ActionBarActivity {
 
     public static Home getMain(){return main;}
 
+    public static void clearNewNameArea(){
+        LinearLayout ll = (LinearLayout) main.findViewById(R.id.newNameContainer);
+        ll.removeAllViews();
+
+    }
+
+    public static void addNewName(String name){
+        Person p = new Person();
+        p.name = name;
+        DB.insertPerson(p);
+        main.updateView();
+    }
+
     public static void makeToast(String st){
         Toast.makeText(main.getApplicationContext(), st, Toast.LENGTH_LONG).show();
     }
@@ -76,10 +89,12 @@ public class Home extends ActionBarActivity {
         }
 
         if (id == R.id.action_newPerson){
-            Person p = new Person();
-            p.name = "bob";
-            DB.insertPerson(p);
-            updateView();
+            LinearLayout ll = (LinearLayout) findViewById(R.id.newNameContainer);
+            FragmentManager fm = getFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            NewPersonFragment np = new NewPersonFragment();
+            ft.add(R.id.newNameContainer,np);
+            ft.commit();
         }
 
         return super.onOptionsItemSelected(item);

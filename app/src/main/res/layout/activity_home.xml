@@ -8,16 +8,16 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_alignBottom="@+id/scrollView"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/newNameContainer"></LinearLayout>
 
     <ScrollView
+        android:layout_below="@+id/newNameContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" >
 
         <LinearLayout
