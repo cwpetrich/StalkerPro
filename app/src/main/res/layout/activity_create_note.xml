@@ -6,63 +6,75 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.cs3010.stalkerpro.CreateNote">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="NoteText"
-        android:id="@+id/createNoteEditTextLabel"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/createNoteEditText"
-        android:layout_below="@+id/createNoteEditTextLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_weight="1"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/createNoteEditText"
-        android:text="Print DB"
-        android:id="@+id/createNotePrintButton"
-        android:onClick="printDB"/>
-
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Search:"
-        android:layout_below="@+id/createNotePrintButton"
-        android:id="@+id/createNoteSearchLabel" />
-
-    <EditText
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/createNoteSearchBox"
-        android:layout_below="@+id/createNoteSearchLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/createNoteScrollView"
-        android:layout_below="@+id/createNoteSearchBox"
-        android:layout_centerHorizontal="true" >
+        android:layout_height="fill_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/createNoteSearchResultsList">
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
 
-        </LinearLayout>
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="NoteText"
+                android:id="@+id/createNoteEditTextLabel"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/createNoteEditText"
+                android:layout_below="@+id/createNoteEditTextLabel"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <Button
+                android:layout_weight="1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/createNoteEditText"
+                android:text="Print DB"
+                android:id="@+id/createNotePrintButton"
+                android:onClick="printDB"/>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Search:"
+                android:layout_below="@+id/createNotePrintButton"
+                android:id="@+id/createNoteSearchLabel" />
+
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/createNoteSearchBox"
+                android:layout_below="@+id/createNoteSearchLabel"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:id="@+id/createNoteScrollView"
+                android:layout_below="@+id/createNoteSearchBox"
+                android:layout_centerHorizontal="true" >
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/createNoteSearchResultsList">
+
+                </LinearLayout>
+
+            </ScrollView>
+
+        </RelativeLayout>
 
     </ScrollView>
 
