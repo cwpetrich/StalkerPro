@@ -5,11 +5,12 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -56,9 +57,15 @@ public class CreateNote extends ActionBarActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mPeople = databaseAdapter.getPeople(s.toString());
+                LinearLayout searchResults = (LinearLayout) findViewById(R.id.createNoteSearchResultsList);
+                searchResults.removeAllViews();
                 for (int i = 0; i < mPeople.size(); i++)
                 {
-                    Log.d("CONRAD", mPeople.get(i).name);
+                    TextView tv = new TextView(context);
+                    tv.setText(mPeople.get(i).name);
+                    tv.setTextSize((float) 25.0);
+                    tv.setPadding(0, 0, 0, 5);
+                    searchResults.addView(tv);
                 }
             }
 
@@ -76,7 +83,7 @@ public class CreateNote extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_blank_note, menu);
+        getMenuInflater().inflate(R.menu.menu_create_note, menu);
         return true;
     }
 

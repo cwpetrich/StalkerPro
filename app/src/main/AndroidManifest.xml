@@ -18,7 +18,7 @@
         </activity>
         <activity
             android:name=".CreateNote"
-            android:label="@string/title_activity_blank_note">
+            android:label="@string/title_activity_create_note">
         </activity>
         <activity
             android:name=".ViewNotes"

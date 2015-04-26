@@ -27,11 +27,9 @@ public class Home extends ActionBarActivity {
     public static void clearNewNameArea(){
         LinearLayout ll = (LinearLayout) main.findViewById(R.id.newNameContainer);
         ll.removeAllViews();
-
     }
 
     public static void addNewName(String name){
-        clearNewNameArea();
         Person p = new Person();
         p.name = name;
         DB.insertPerson(p);
@@ -98,7 +96,7 @@ public class Home extends ActionBarActivity {
         }
 
         if (id == R.id.action_newPerson){
-            LinearLayout ll = (LinearLayout) findViewById(R.id.newNameContainer);
+            clearNewNameArea();
             FragmentManager fm = getFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             NewPersonFragment np = new NewPersonFragment();
