@@ -61,10 +61,17 @@ public class CreateNote extends ActionBarActivity {
                 searchResults.removeAllViews();
                 for (int i = 0; i < mPeople.size(); i++)
                 {
+                    final String mName = mPeople.get(i).name;
                     TextView tv = new TextView(context);
-                    tv.setText(mPeople.get(i).name);
+                    tv.setText(mName);
                     tv.setTextSize((float) 25.0);
                     tv.setPadding(0, 0, 0, 5);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            searchText.setText(mName);
+                        }
+                    });
                     searchResults.addView(tv);
                 }
             }
