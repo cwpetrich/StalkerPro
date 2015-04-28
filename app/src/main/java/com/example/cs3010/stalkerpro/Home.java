@@ -62,13 +62,15 @@ public class Home extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        Person p = new Person();
+        /*p.name = "Craig";
+        DB.insertPerson(p);
+        Note n = new Note();
+        n.note = "Has big hair.";
+        n.puuid = p.puuid;
+        DB.insertNote(n);*/
+
         updateView();
-        /*FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        nameFragment nf = new nameFragment();
-        nf.setName("bob");
-        ft.add(R.id.namesContainer,nf);
-        ft.commit();*/
     }
 
 

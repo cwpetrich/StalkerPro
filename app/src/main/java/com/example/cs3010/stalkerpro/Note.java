@@ -19,7 +19,7 @@ public class Note {
     // make an empty profile
     public Note() {
         nuuid = UUID.randomUUID();
-        puuid = UUID.randomUUID();
+        puuid = UUID.randomUUID(); //This should be auto set to the puuid of unknown person.
         note = "";
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
         Date date = new Date();

@@ -75,7 +75,7 @@ public class NoteDatabaseAdapter {
         String[] columns = {DatabaseSchema.id, DatabaseSchema.nuuid, DatabaseSchema.puuid, DatabaseSchema.note,
                 DatabaseSchema.created_at, DatabaseSchema.modified_at};
         Cursor cursor = db.query(DatabaseSchema.NOTES_TABLE_NAME, columns, null, null, null, null, null);
-        ArrayList<Note> notes = new ArrayList<>();
+        ArrayList<Note> notes = new ArrayList<Note>();
         while(cursor.moveToNext())
         {
             Note note = new Note();
@@ -107,6 +107,26 @@ public class NoteDatabaseAdapter {
         return note;
     }
 
+    public ArrayList<Note> getNotesFor(UUID puuid)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.nuuid, DatabaseSchema.puuid, DatabaseSchema.note,
+                DatabaseSchema.created_at, DatabaseSchema.modified_at};
+        String[] whereArgs = {String.valueOf(puuid)};
+        Cursor cursor = db.query(DatabaseSchema.NOTES_TABLE_NAME, columns, DatabaseSchema.puuid + " =?", whereArgs, null, null, null);
+        ArrayList<Note> notes = new ArrayList<Note>();
+        while (cursor.moveToNext()) {
+            Note note = new Note();
+            note.nuuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.nuuid)));
+            note.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+            note.note = cursor.getString(cursor.getColumnIndex(DatabaseSchema.note));
+            note.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+            note.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+            notes.add(note);
+        }
+        return notes;
+    }
+
     public ArrayList<Person> getPeople(String name)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
@@ -114,7 +134,7 @@ public class NoteDatabaseAdapter {
                 DatabaseSchema.created_at, DatabaseSchema.modified_at};
         String[] whereArgs = {name+"%"};
         Cursor cursor = db.query(DatabaseSchema.PEOPLE_TABLE_NAME, columns, DatabaseSchema.name + " LIKE ?", whereArgs, null, null, null);
-        ArrayList<Person> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<Person>();
         while(cursor.moveToNext())
         {
             Person person = new Person();
@@ -134,7 +154,7 @@ public class NoteDatabaseAdapter {
         String[] columns = {DatabaseSchema.id, DatabaseSchema.puuid, DatabaseSchema.name,
                 DatabaseSchema.created_at, DatabaseSchema.modified_at};
         Cursor cursor = db.query(DatabaseSchema.PEOPLE_TABLE_NAME, columns, null, null, null, null, null);
-        ArrayList<Person> people = new ArrayList<>();
+        ArrayList<Person> people = new ArrayList<Person>();
         while(cursor.moveToNext())
         {
             Person person = new Person();

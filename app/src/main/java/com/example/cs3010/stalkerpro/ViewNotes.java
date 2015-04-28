@@ -13,11 +13,28 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 
 public class ViewNotes extends ActionBarActivity {
     private UUID puuid;
+
+    private void updateView(){
+        LinearLayout ll = (LinearLayout)findViewById(R.id.notesContainer);
+        ll.removeAllViews();
+        NoteDatabaseAdapter db = Home.getDatabase();
+        ArrayList<Note> notes = db.getNotesFor(puuid);
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        for(int i = 0; i < notes.size(); i++){
+            Note n = notes.get(i);
+            noteViewFragment nv = new noteViewFragment();
+            nv.giveNote(n);
+            ft.add(R.id.notesContainer,nv);
+        }
+        ft.commit();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +46,7 @@ public class ViewNotes extends ActionBarActivity {
         //TextView name =(TextView) findViewById(R.id.notesOwner);
         String n = b.getString("name");
         setTitle(n);
-
-        //name.setText(n);
-        NoteDatabaseAdapter db = Home.getDatabase();
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        noteViewFragment nv = new noteViewFragment();
-        ft.add(R.id.notesContainer,nv);
-        ft.commit();
+        updateView();
     }
 
 

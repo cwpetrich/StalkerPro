@@ -14,14 +14,22 @@ import android.widget.TextView;
 import java.util.zip.Inflater;
 
 public class noteViewFragment extends Fragment {
+    private Note note;
 
     public noteViewFragment() {
         // Required empty public constructor
     }
 
+    public void giveNote(Note n){
+        note = n;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(note==null){
+            note = new Note();
+        }
     }
 
     @Override
@@ -30,6 +38,10 @@ public class noteViewFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_note_view, container, false);
         Button b = (Button)view.findViewById(R.id.editButton);
+        TextView t = (TextView)view.findViewById(R.id.noteData);
+        t.setText(note.note);
+        TextView s = (TextView)view.findViewById(R.id.noteDate);
+        s.setText(note.modified_at.toString());
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
