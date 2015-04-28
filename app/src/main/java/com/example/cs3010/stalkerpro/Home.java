@@ -63,12 +63,12 @@ public class Home extends ActionBarActivity {
         setContentView(R.layout.activity_home);
 
         Person p = new Person();
-        /*p.name = "Craig";
+        p.name = "Craig";
         DB.insertPerson(p);
         Note n = new Note();
         n.note = "Has big hair.";
         n.puuid = p.puuid;
-        DB.insertNote(n);*/
+        DB.insertNote(n);
 
         updateView();
     }

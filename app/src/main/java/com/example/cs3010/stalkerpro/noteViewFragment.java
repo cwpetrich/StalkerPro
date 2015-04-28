@@ -61,6 +61,8 @@ public class noteViewFragment extends Fragment {
                     t.setVisibility(View.VISIBLE);
                     e.setVisibility(View.GONE);
                     more.setVisibility(View.GONE);
+                    note.note = e.getText().toString();
+                    Home.getDatabase().updateNoteText(note.nuuid,note.note);
                     b.setText("Edit");
                 }
 
