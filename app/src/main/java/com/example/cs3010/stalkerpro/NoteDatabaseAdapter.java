@@ -20,11 +20,35 @@ import java.util.UUID;
 public class NoteDatabaseAdapter {
     DatabaseSchema dbSchema;
     Context context;
+    private static UUID UnknownUUID;
+    private static boolean NoteDatabaseLoadedFlag = false;
+    private static String unknownName = "UnKnown";
 
     public NoteDatabaseAdapter(Context context)
     {
         this.context = context;
         dbSchema = new DatabaseSchema(context);
+
+        //////////////////////////////////////////////////////
+        //Getting writable DB to initialize creation
+        //in order to properly test if a DB has been made yet.
+        dbSchema.getWritableDatabase();
+        //////////////////////////////////////////////////////
+
+        //Create Unknown person if db hasn't been made yet.
+        if(dbSchema.databaseJustMade()){
+            Person unknown = new Person();
+            unknown.name = unknownName;
+            UnknownUUID = unknown.puuid;
+            insertPerson(unknown);
+        }else{
+            UnknownUUID = getPeople(unknownName).get(0).puuid;
+        }
+        NoteDatabaseLoadedFlag = true;
+    }
+
+    public UUID getUnknownUUID(){
+        return UnknownUUID;
     }
 
     public long insertNote(Note note)
@@ -42,14 +66,17 @@ public class NoteDatabaseAdapter {
 
     public long insertPerson(Person person)
     {
-        SQLiteDatabase db = dbSchema.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(DatabaseSchema.puuid, String.valueOf(person.puuid));
-        contentValues.put(DatabaseSchema.name, person.name);
-        contentValues.put(DatabaseSchema.created_at, person.created_at);
-        contentValues.put(DatabaseSchema.modified_at, person.modified_at);
-        long id = db.insert(DatabaseSchema.PEOPLE_TABLE_NAME, null, contentValues);
-        return id;
+        if(!NoteDatabaseLoadedFlag || person.name != unknownName) {
+            SQLiteDatabase db = dbSchema.getWritableDatabase();
+            ContentValues contentValues = new ContentValues();
+            contentValues.put(DatabaseSchema.puuid, String.valueOf(person.puuid));
+            contentValues.put(DatabaseSchema.name, person.name);
+            contentValues.put(DatabaseSchema.created_at, person.created_at);
+            contentValues.put(DatabaseSchema.modified_at, person.modified_at);
+            long id = db.insert(DatabaseSchema.PEOPLE_TABLE_NAME, null, contentValues);
+            return id;
+        }
+        return -1;
     }
 
     public int deleteNoteRow(UUID nuuid)
@@ -232,6 +259,7 @@ public class NoteDatabaseAdapter {
 
     static class DatabaseSchema extends SQLiteOpenHelper {
         // Database name, table name, and database version
+        private static boolean newDatabase = false;
         private static final String DATABASE_NAME = "stalkerNotesDatabase.db";
         private static final String NOTES_TABLE_NAME = "notes";
         private static final String PEOPLE_TABLE_NAME = "people";
@@ -276,6 +304,14 @@ public class NoteDatabaseAdapter {
             db.execSQL(CREATE_NOTES_TABLE);
             db.execSQL(CREATE_PEOPLE_TABLE);
             Log.d("CONRAD", "onCreate is called");
+            newDatabase = true;
+        }
+        public boolean databaseJustMade(){
+            if(newDatabase){
+                newDatabase = false;
+                return true;
+            }
+            return false;
         }
 
         @Override

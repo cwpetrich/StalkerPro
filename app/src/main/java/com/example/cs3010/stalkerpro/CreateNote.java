@@ -27,6 +27,13 @@ public class CreateNote extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Setting value ahead of time
+        //Need to put it somewhere more useful probably
+        setResult(1);
+        //Using specifically for when ViewNotes
+        //calls createNote, and then updates view.
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
 

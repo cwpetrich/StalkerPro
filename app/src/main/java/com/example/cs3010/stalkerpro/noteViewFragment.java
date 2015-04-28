@@ -1,6 +1,7 @@
 package com.example.cs3010.stalkerpro;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -42,6 +43,7 @@ public class noteViewFragment extends Fragment {
         t.setText(note.note);
         TextView s = (TextView)view.findViewById(R.id.noteDate);
         s.setText(note.modified_at.toString());
+
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,7 +75,15 @@ public class noteViewFragment extends Fragment {
         more.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(getActivity(), CreateNote.class);
+                Bundle b = new Bundle();
+                b.putString("puuid",note.puuid.toString());
+                b.putString("nuuid",note.nuuid.toString());
+                b.putString("note",note.note.toString());
+                b.putString("created_at",note.created_at);
+                b.putString("modified_at",note.modified_at);
+                intent.putExtras(b);
+                getActivity().startActivityForResult(intent, 1);
             }
         });
 

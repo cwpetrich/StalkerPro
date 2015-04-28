@@ -79,6 +79,15 @@ public class ViewNotes extends ActionBarActivity {
                     .setNegativeButton("Nevermind",null).show();
         }
 
+        if(id == R.id.action_new_note) {
+            Intent intent = new Intent(this, CreateNote.class);
+            Bundle b = new Bundle();
+            b.putString("puuid",puuid.toString());
+            intent.putExtras(b);
+            startActivityForResult(intent, 1);
+
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -88,5 +97,13 @@ public class ViewNotes extends ActionBarActivity {
         Intent returnIntent = new Intent();
         setResult(RESULT_CANCELED, returnIntent);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode ==1){
+            updateView();
+        }
     }
 }
