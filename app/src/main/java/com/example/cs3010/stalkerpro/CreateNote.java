@@ -77,6 +77,7 @@ public class CreateNote extends ActionBarActivity {
                         @Override
                         public void onClick(View v) {
                             searchText.setText(mName);
+                            
                         }
                     });
                     searchResults.addView(tv);
