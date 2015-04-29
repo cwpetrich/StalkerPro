@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class CreateNote extends ActionBarActivity {
 
     Note mNote;
     ArrayList<Person> mPeople;
+    Person mPerson;
     EditText noteText;
     EditText searchText;
     NoteDatabaseAdapter databaseAdapter;
@@ -68,20 +70,21 @@ public class CreateNote extends ActionBarActivity {
                 searchResults.removeAllViews();
                 for (int i = 0; i < mPeople.size(); i++)
                 {
-                    final String mName = mPeople.get(i).name;
+                    mPerson = mPeople.get(i);
                     TextView tv = new TextView(context);
-                    tv.setText(mName);
+                    tv.setText(mPerson.name);
                     tv.setTextSize((float) 25.0);
                     tv.setPadding(0, 0, 0, 5);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            searchText.setText(mName);
-                            
+                            searchText.setText(mPerson.name);
                         }
                     });
                     searchResults.addView(tv);
                 }
+
+
             }
 
             @Override
