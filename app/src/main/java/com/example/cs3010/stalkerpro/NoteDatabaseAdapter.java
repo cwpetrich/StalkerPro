@@ -194,6 +194,18 @@ public class NoteDatabaseAdapter {
         return people;
     }
 
+    public String getPersonName(UUID puuid){
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.puuid, DatabaseSchema.name, DatabaseSchema.created_at,
+                DatabaseSchema.modified_at};
+        String[] whereArgs = {String.valueOf(puuid)};
+        Cursor cursor = db.query(DatabaseSchema.PEOPLE_TABLE_NAME, columns, DatabaseSchema.puuid+" =?", whereArgs, null, null, null);
+        if(cursor.moveToFirst()){
+            return cursor.getString(cursor.getColumnIndex(DatabaseSchema.name));
+        }
+        return"";
+    }
+
     public String getPersonData(UUID puuid)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();

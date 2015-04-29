@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class CreateNote extends ActionBarActivity {
@@ -36,12 +37,30 @@ public class CreateNote extends ActionBarActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_note);
-
-        mNote = new Note();
         databaseAdapter = new NoteDatabaseAdapter(this);
-        databaseAdapter.insertNote(mNote);
+        Bundle b = getIntent().getExtras();
+        String inPuuid = b!= null && b.containsKey("puuid") ? b.getString("puuid") : null;
+        if(inPuuid != null){
+            mNote = new Note();
+            mNote.puuid = UUID.fromString(inPuuid);
+            String inNuuid = b.containsKey("nuuid") ? b.getString("nuuid") : null;
+            if(inNuuid != null){
+                mNote.nuuid = UUID.fromString(inNuuid);
+                mNote.note = b.getString("note");
+                mNote.created_at = b.getString("created_at");
+                mNote.modified_at = b.getString("modified_at");
+            }else{
+                databaseAdapter.insertNote(mNote);
+            }
+        }else {
+            mNote = new Note();
+            databaseAdapter.insertNote(mNote);
+        }
+
+
 
         noteText = (EditText) findViewById(R.id.createNoteEditText);
+        noteText.setText(mNote.note);
         noteText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -57,6 +76,7 @@ public class CreateNote extends ActionBarActivity {
         });
 
         searchText = (EditText) findViewById(R.id.createNoteSearchBox);
+        searchText.setText(Home.getDatabase().getPersonName(mNote.puuid));
         searchText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
