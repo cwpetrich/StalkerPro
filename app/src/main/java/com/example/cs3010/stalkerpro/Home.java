@@ -1,14 +1,19 @@
 package com.example.cs3010.stalkerpro;
 
 
+import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -42,15 +47,18 @@ public class Home extends ActionBarActivity {
 
     private void updateView(){
         LinearLayout ll = (LinearLayout) findViewById(R.id.namesContainer);
-        ll.removeAllViews();
         ArrayList<Person> list = DB.getPeople();
         FragmentManager fm = main.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        for(int i =0;i<list.size();i++){
+        for(int i = 0; i < list.size(); i++){
+            if (ll.getChildAt(i) != null)
+            {
+                ll.removeViewAt(i);
+            }
             nameFragment nf = new nameFragment();
             nf.setName(list.get(i).name);
             nf.setPuuid(list.get(i).puuid);
-            ft.add(R.id.namesContainer,nf);
+            ft.add(ll.getId(), nf);
         }
         ft.commit();
     }
@@ -107,5 +115,11 @@ public class Home extends ActionBarActivity {
         if(requestCode ==1){
             updateView();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }
