@@ -226,6 +226,16 @@ public class NoteDatabaseAdapter {
         return count;
     }
 
+    public int updateNotePuuid(UUID nuuid, UUID puuid)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseSchema.puuid, puuid.toString());
+        String[] whereArgs = {String.valueOf(nuuid)};
+        int count = db.update(DatabaseSchema.NOTES_TABLE_NAME, contentValues, DatabaseSchema.nuuid+" =?", whereArgs);
+        return count;
+    }
+
     public int updateNoteModifiedAt(UUID nuuid, String modified_at)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
