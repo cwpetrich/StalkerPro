@@ -174,7 +174,6 @@ public class NoteDatabaseAdapter {
         return people;
     }
 
-
     public ArrayList<Person> getPeople()
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
@@ -194,8 +193,8 @@ public class NoteDatabaseAdapter {
         return people;
     }
 
-
-    public String getPersonName(UUID puuid) {
+    public String getPersonName(UUID puuid)
+    {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
         String[] columns = {DatabaseSchema.id, DatabaseSchema.puuid, DatabaseSchema.name, DatabaseSchema.created_at,
                 DatabaseSchema.modified_at};
