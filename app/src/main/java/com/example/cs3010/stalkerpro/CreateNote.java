@@ -109,6 +109,15 @@ public class CreateNote extends ActionBarActivity {
         });
     }
 
+    public void deleteNote(){
+        Home.getDatabase().deleteNoteRow(mNote.nuuid);
+        finish();
+    }
+
+    public void saveNote(){
+        finish();
+    }
+
     public void printDB(View view)
     {
         Note note = databaseAdapter.getNote(mNote.nuuid);
@@ -130,7 +139,12 @@ public class CreateNote extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_save) {
+            saveNote();
+            return true;
+        }
+        if (id == R.id.action_delete){
+            deleteNote();
             return true;
         }
 
