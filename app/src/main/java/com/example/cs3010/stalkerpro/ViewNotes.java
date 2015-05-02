@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import java.io.File;
 import java.security.GeneralSecurityException;
@@ -108,11 +109,10 @@ public class ViewNotes extends ActionBarActivity {
 
         }
         if(id == R.id.action_new_recording) {
-            Intent intent = new Intent(this, SoundRecording.class);
-            Bundle b = new Bundle();
-            b.putString("puuid",puuid.toString());
-            intent.putExtras(b);
-            startActivityForResult(intent, 1);
+            Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takeVideoIntent, 2);
+            }
         }
 
 
@@ -160,6 +160,12 @@ public class ViewNotes extends ActionBarActivity {
                     break;
             }
             updateView();
+        }
+        if(requestCode == 2){
+            Uri videoUri = data.getData();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(videoUri,"video/*");
+            startActivity(intent);
         }
     }
 }
