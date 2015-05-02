@@ -45,20 +45,17 @@ public class Home extends ActionBarActivity {
         Toast.makeText(main.getApplicationContext(), st, Toast.LENGTH_LONG).show();
     }
 
-    private void updateView(){
+    private void updateView() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.namesContainer);
+        ll.removeAllViews();
         ArrayList<Person> list = DB.getPeople();
         FragmentManager fm = main.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        for(int i = 0; i < list.size(); i++){
-            if (ll.getChildAt(i) != null)
-            {
-                ll.removeViewAt(i);
-            }
+        for (int i = 0; i < list.size(); i++) {
             nameFragment nf = new nameFragment();
             nf.setName(list.get(i).name);
             nf.setPuuid(list.get(i).puuid);
-            ft.add(ll.getId(), nf);
+            ft.add(R.id.namesContainer, nf);
         }
         ft.commit();
     }
