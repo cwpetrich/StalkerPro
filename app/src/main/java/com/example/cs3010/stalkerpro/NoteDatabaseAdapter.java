@@ -79,6 +79,19 @@ public class NoteDatabaseAdapter {
         return -1;
     }
 
+    public long insertImage(Image image)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseSchema.image_name, image.image_name);
+        contentValues.put(DatabaseSchema.puuid, String.valueOf(image.puuid));
+        contentValues.put(DatabaseSchema.image_caption, image.image_caption);
+        contentValues.put(DatabaseSchema.created_at, image.created_at);
+        contentValues.put(DatabaseSchema.modified_at, image.modified_at);
+        long id = db.insert(DatabaseSchema.PEOPLE_TABLE_NAME, null, contentValues);
+        return id;
+    }
+
     public int deleteNoteRow(UUID nuuid)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
@@ -93,7 +106,16 @@ public class NoteDatabaseAdapter {
         String[] whereArgs = {String.valueOf(puuid)};
         int pcount = db.delete(DatabaseSchema.PEOPLE_TABLE_NAME, DatabaseSchema.puuid + " =?", whereArgs);
         int ncount = db.delete(DatabaseSchema.NOTES_TABLE_NAME, DatabaseSchema.puuid + " =?",whereArgs);
-        return pcount+ncount;
+        int icount = db.delete(DatabaseSchema.IMAGE_TABLE_NAME, DatabaseSchema.puuid + " =?", whereArgs);
+        return pcount+ncount+icount;
+    }
+
+    public int deleteImageRow(String image_name)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] whereArgs = {image_name};
+        int count = db.delete(DatabaseSchema.IMAGE_TABLE_NAME, DatabaseSchema.image_name + " =?", whereArgs);
+        return count;
     }
 
     public ArrayList<Note> getNotes()
@@ -152,6 +174,26 @@ public class NoteDatabaseAdapter {
             notes.add(note);
         }
         return notes;
+    }
+
+    public ArrayList<Image> getImagesFor(UUID puuid)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.image_name, DatabaseSchema.puuid,
+                DatabaseSchema.image_caption, DatabaseSchema.created_at, DatabaseSchema.modified_at};
+        String[] whereArgs = {String.valueOf(puuid)};
+        Cursor cursor = db.query(DatabaseSchema.IMAGE_TABLE_NAME, columns, DatabaseSchema.puuid + " =?", whereArgs, null, null, null);
+        ArrayList<Image> images = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            Image image = new Image();
+            image.image_name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.image_name));
+            image.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+            image.image_caption = cursor.getString(cursor.getColumnIndex(DatabaseSchema.image_caption));
+            image.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+            image.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+            images.add(image);
+        }
+        return images;
     }
 
     public ArrayList<Person> getPeople(String name)
@@ -303,6 +345,7 @@ public class NoteDatabaseAdapter {
         private static final String DATABASE_NAME = "stalkerNotesDatabase.db";
         private static final String NOTES_TABLE_NAME = "notes";
         private static final String PEOPLE_TABLE_NAME = "people";
+        private static final String IMAGE_TABLE_NAME = "images";
         private static final int DATABASE_VERSION = 1;
         // Column names
         private static final String id = "_id";
@@ -310,8 +353,19 @@ public class NoteDatabaseAdapter {
         private static final String puuid = "puuid";
         private static final String note = "note";
         private static final String name = "name";
+        private static final String image_name = "image_name";
+        private static final String image_caption = "image_caption";
         private static final String created_at = "created_at";
         private static final String modified_at = "modified_at";
+
+        private static final String CREATE_IMAGE_TABLE = "CREATE TABLE "+
+                PEOPLE_TABLE_NAME+" ("+
+                id+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                image_name+" VARCHAR(255), "+
+                puuid+" VARCHAR(255), "+
+                image_caption+" VARCHAR(255), "+
+                created_at+" VARCHAR(255), "+
+                modified_at+" VARCHAR(255));";
         // sql query to create a new table with the correct schema
         private static final String CREATE_NOTES_TABLE = "CREATE TABLE "+
                 NOTES_TABLE_NAME+" ("+
@@ -331,6 +385,7 @@ public class NoteDatabaseAdapter {
         // sql query to remove the table if it exists
         private static final String DROP_NOTES_TABLE = "DROP TABLE IF EXISTS "+NOTES_TABLE_NAME;
         private static final String DROP_PEOPLE_TABLE = "DROP TABLE IF EXISTS "+PEOPLE_TABLE_NAME;
+        private static final String DROP_IMAGE_TABLE = "DROP TABLE IF EXISTS "+IMAGE_TABLE_NAME;
         private Context context;
 
         public DatabaseSchema(Context context) {
@@ -343,6 +398,7 @@ public class NoteDatabaseAdapter {
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_NOTES_TABLE);
             db.execSQL(CREATE_PEOPLE_TABLE);
+            db.execSQL(CREATE_IMAGE_TABLE);
             Log.d("CONRAD", "onCreate is called");
             newDatabase = true;
         }
@@ -358,6 +414,7 @@ public class NoteDatabaseAdapter {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             db.execSQL(DROP_NOTES_TABLE);
             db.execSQL(DROP_PEOPLE_TABLE);
+            db.execSQL(DROP_IMAGE_TABLE);
             Log.d("CONRAD", "onUpdate is called");
             onCreate(db);
         }
