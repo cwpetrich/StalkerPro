@@ -88,7 +88,11 @@ public class ViewNotes extends ActionBarActivity {
 
         }
         if(id == R.id.action_new_recording) {
-
+            Intent intent = new Intent(this, SoundRecording.class);
+            Bundle b = new Bundle();
+            b.putString("puuid",puuid.toString());
+            intent.putExtras(b);
+            startActivityForResult(intent, 1);
         }
 
         return super.onOptionsItemSelected(item);
