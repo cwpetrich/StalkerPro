@@ -27,6 +27,8 @@ public class CreateNote extends ActionBarActivity {
     NoteDatabaseAdapter databaseAdapter;
     Context context = this;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Setting value ahead of time
