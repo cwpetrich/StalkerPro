@@ -108,14 +108,13 @@ public class ViewNotes extends ActionBarActivity {
             startActivityForResult(intent, 1);
 
         }
+
         if(id == R.id.action_new_recording) {
             Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(takeVideoIntent, 2);
             }
         }
-
-
 
         if(id == R.id.action_new_picture){
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

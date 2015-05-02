@@ -31,10 +31,6 @@
             android:label="@string/title_activity_view_notes"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
-            android:name=".SoundRecording"
-            android:label="@string/title_activity_sound_recording" >
-        </activity>
     </application>
 
 </manifest>
