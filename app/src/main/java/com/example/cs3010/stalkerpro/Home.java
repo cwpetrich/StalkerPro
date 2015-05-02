@@ -5,6 +5,7 @@ import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -68,7 +70,11 @@ public class Home extends ActionBarActivity {
         DB = new NoteDatabaseAdapter(getApplicationContext());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                "StalkerPro");
+        if (!f.exists()) {
+            f.mkdirs();
+        }
         updateView();
     }
 
