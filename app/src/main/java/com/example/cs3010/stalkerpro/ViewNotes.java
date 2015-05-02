@@ -27,7 +27,7 @@ public class ViewNotes extends ActionBarActivity {
     private File imageFile;
     private ImageClass imageClass;
 
-    private void updateView(){
+    public void updateView(){
         LinearLayout ll = (LinearLayout)findViewById(R.id.notesContainer);
         ll.removeAllViews();
         NoteDatabaseAdapter db = Home.getDatabase();
@@ -124,7 +124,7 @@ public class ViewNotes extends ActionBarActivity {
                     imageClass.image_name);
             Uri tempuri = Uri.fromFile(imageFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
-            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,1);
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0);
             startActivityForResult(intent,0);
         }
 
