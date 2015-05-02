@@ -88,7 +88,7 @@ public class NoteDatabaseAdapter {
         contentValues.put(DatabaseSchema.image_caption, image.image_caption);
         contentValues.put(DatabaseSchema.created_at, image.created_at);
         contentValues.put(DatabaseSchema.modified_at, image.modified_at);
-        long id = db.insert(DatabaseSchema.PEOPLE_TABLE_NAME, null, contentValues);
+        long id = db.insert(DatabaseSchema.IMAGE_TABLE_NAME, null, contentValues);
         return id;
     }
 
@@ -365,7 +365,7 @@ public class NoteDatabaseAdapter {
         private static final String modified_at = "modified_at";
 
         private static final String CREATE_IMAGE_TABLE = "CREATE TABLE "+
-                PEOPLE_TABLE_NAME+" ("+
+                IMAGE_TABLE_NAME+" ("+
                 id+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 image_name+" VARCHAR(255), "+
                 puuid+" VARCHAR(255), "+
