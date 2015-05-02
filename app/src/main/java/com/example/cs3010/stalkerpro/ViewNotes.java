@@ -87,6 +87,9 @@ public class ViewNotes extends ActionBarActivity {
             startActivityForResult(intent, 1);
 
         }
+        if(id == R.id.action_new_recording) {
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

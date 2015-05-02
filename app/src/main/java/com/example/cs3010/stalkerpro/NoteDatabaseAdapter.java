@@ -355,7 +355,7 @@ public class NoteDatabaseAdapter {
         private static final String modified_at = "modified_at";
 
         private static final String CREATE_IMAGE_TABLE = "CREATE TABLE "+
-                PEOPLE_TABLE_NAME+" ("+
+                IMAGE_TABLE_NAME+" ("+
                 id+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 image_name+" VARCHAR(255), "+
                 puuid+" VARCHAR(255), "+

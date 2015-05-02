@@ -8,4 +8,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_create_note">Create Note</string>
     <string name="title_activity_view_notes">ViewNotes</string>
+    <string name="title_activity_sound_recording">SoundRecording</string>
 </resources>
