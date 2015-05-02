@@ -1,10 +1,14 @@
 package com.example.cs3010.stalkerpro;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +16,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.File;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -19,6 +24,7 @@ import java.util.UUID;
 
 public class ViewNotes extends ActionBarActivity {
     private UUID puuid;
+    private File imageFile;
 
     private void updateView(){
         LinearLayout ll = (LinearLayout)findViewById(R.id.notesContainer);
@@ -32,6 +38,13 @@ public class ViewNotes extends ActionBarActivity {
             noteViewFragment nv = new noteViewFragment();
             nv.giveNote(n);
             ft.add(R.id.notesContainer,nv);
+        }
+        if(imageFile != null){
+            if(imageFile.exists()){
+                ImageView i = new ImageView();
+                i.giveImage(imageFile);
+                ft.add(R.id.notesContainer,i);
+            }
         }
         ft.commit();
     }
@@ -88,6 +101,18 @@ public class ViewNotes extends ActionBarActivity {
 
         }
 
+
+
+        if(id == R.id.action_new_picture){
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/",
+                    UUID.randomUUID().toString()+".jpg");
+            Uri tempuri = Uri.fromFile(imageFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,1);
+            startActivityForResult(intent,0);
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -104,6 +129,20 @@ public class ViewNotes extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode ==1){
             updateView();
+        }
+        if(requestCode == 0){
+            switch (resultCode){
+                case Activity.RESULT_OK:
+                    if(imageFile.exists()){
+                        Home.makeToast(imageFile.getName());
+                    }else{
+                        Home.makeToast("Error Saving File");
+                    }
+                    break;
+                case Activity.RESULT_CANCELED:
+
+                    break;
+            }
         }
     }
 }
