@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by Conrad on 5/2/2015.
  */
-public class Image {
+public class ImageClass {
 
     public UUID puuid;
     public String image_name;
@@ -17,7 +17,7 @@ public class Image {
     public String modified_at;
 
     // make an empty profile
-    public Image() {
+    public ImageClass() {
         puuid = Home.getDatabase().getUnknownUUID();
         image_name = UUID.randomUUID() + ".jpg";
         image_caption = "new image";
@@ -27,9 +27,9 @@ public class Image {
         modified_at = dateFormat.format(date);
     }
 
-    public Image clone(Image image)
+    public ImageClass clone(ImageClass image)
     {
-        Image newImage = new Image();
+        ImageClass newImage = new ImageClass();
         newImage.image_name = image.image_name;
         newImage.puuid = image.puuid;
         newImage.image_caption = image.image_caption;

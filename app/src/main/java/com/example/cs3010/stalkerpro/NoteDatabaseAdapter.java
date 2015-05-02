@@ -79,7 +79,7 @@ public class NoteDatabaseAdapter {
         return -1;
     }
 
-    public long insertImage(Image image)
+    public long insertImage(ImageClass image)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -176,23 +176,29 @@ public class NoteDatabaseAdapter {
         return notes;
     }
 
-    public ArrayList<Image> getImagesFor(UUID puuid)
+    public ArrayList<ImageClass> getImagesFor(UUID puuid)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
         String[] columns = {DatabaseSchema.id, DatabaseSchema.image_name, DatabaseSchema.puuid,
                 DatabaseSchema.image_caption, DatabaseSchema.created_at, DatabaseSchema.modified_at};
         String[] whereArgs = {String.valueOf(puuid)};
-        Cursor cursor = db.query(DatabaseSchema.IMAGE_TABLE_NAME, columns, DatabaseSchema.puuid + " =?", whereArgs, null, null, null);
-        ArrayList<Image> images = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            Image image = new Image();
-            image.image_name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.image_name));
-            image.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
-            image.image_caption = cursor.getString(cursor.getColumnIndex(DatabaseSchema.image_caption));
-            image.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
-            image.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
-            images.add(image);
+        ArrayList<ImageClass> images = new ArrayList<>();
+        try {
+            Cursor cursor = db.query(DatabaseSchema.IMAGE_TABLE_NAME, columns, DatabaseSchema.puuid + " =?", whereArgs, null, null, null);
+
+            while (cursor.moveToNext()) {
+                ImageClass image = new ImageClass();
+                image.image_name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.image_name));
+                image.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+                image.image_caption = cursor.getString(cursor.getColumnIndex(DatabaseSchema.image_caption));
+                image.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+                image.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+                images.add(image);
+            }
+        }catch(android.database.SQLException e){
+            e.printStackTrace();
         }
+
         return images;
     }
 

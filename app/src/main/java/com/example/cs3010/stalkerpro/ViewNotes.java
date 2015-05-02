@@ -25,6 +25,7 @@ import java.util.UUID;
 public class ViewNotes extends ActionBarActivity {
     private UUID puuid;
     private File imageFile;
+    private ImageClass imageClass;
 
     private void updateView(){
         LinearLayout ll = (LinearLayout)findViewById(R.id.notesContainer);
@@ -39,11 +40,17 @@ public class ViewNotes extends ActionBarActivity {
             nv.giveNote(n);
             ft.add(R.id.notesContainer,nv);
         }
-        if(imageFile != null){
-            if(imageFile.exists()){
-                ImageView i = new ImageView();
-                i.giveImage(imageFile);
-                ft.add(R.id.notesContainer,i);
+        ArrayList<ImageClass> images = Home.getDatabase().getImagesFor(puuid);
+        for(int i = 0; i < images.size(); i++){
+            File f = new File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/"
+                    ,images.get(i).image_name);
+            if(f.exists()){
+                ImageViewer img = new ImageViewer();
+                img.giveImageData(f,images.get(i));
+                ft.add(R.id.notesContainer,img);
+            }else{
+                Home.getDatabase().deleteImageRow(images.get(i).image_name);
             }
         }
         ft.commit();
@@ -105,8 +112,9 @@ public class ViewNotes extends ActionBarActivity {
 
         if(id == R.id.action_new_picture){
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            imageClass = new ImageClass();
             imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/",
-                    UUID.randomUUID().toString()+".jpg");
+                    imageClass.image_name);
             Uri tempuri = Uri.fromFile(imageFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
             intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,1);
@@ -135,6 +143,7 @@ public class ViewNotes extends ActionBarActivity {
                 case Activity.RESULT_OK:
                     if(imageFile.exists()){
                         Home.makeToast(imageFile.getName());
+                        Home.getDatabase().insertImage(imageClass);
                     }else{
                         Home.makeToast("Error Saving File");
                     }
@@ -143,6 +152,7 @@ public class ViewNotes extends ActionBarActivity {
 
                     break;
             }
+            updateView();
         }
     }
 }
