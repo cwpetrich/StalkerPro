@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class Home extends ActionBarActivity {
             nf.setPuuid(list.get(i).puuid);
             ft.add(R.id.namesContainer,nf);
         }
+
         ft.commit();
     }
 
