@@ -88,6 +88,19 @@ public class NoteDatabaseAdapter {
         return id;
     }
 
+    public long insertVideo(VideoClass video)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseSchema.video_name, video.video_name);
+        contentValues.put(DatabaseSchema.puuid, String.valueOf(video.puuid));
+        contentValues.put(DatabaseSchema.video_caption, video.video_caption);
+        contentValues.put(DatabaseSchema.created_at, video.created_at);
+        contentValues.put(DatabaseSchema.modified_at, video.modified_at);
+        long id = db.insert(DatabaseSchema.VIDEO_TABLE_NAME, null, contentValues);
+        return id;
+    }
+
     public int deleteNoteRow(UUID nuuid)
     {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
@@ -111,6 +124,14 @@ public class NoteDatabaseAdapter {
         SQLiteDatabase db = dbSchema.getWritableDatabase();
         String[] whereArgs = {image_name};
         int count = db.delete(DatabaseSchema.IMAGE_TABLE_NAME, DatabaseSchema.image_name + " =?", whereArgs);
+        return count;
+    }
+
+    public int deleteVideoRow(String video_name)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] whereArgs = {video_name};
+        int count = db.delete(DatabaseSchema.VIDEO_TABLE_NAME, DatabaseSchema.video_name + " =?", whereArgs);
         return count;
     }
 
@@ -170,6 +191,27 @@ public class NoteDatabaseAdapter {
             notes.add(note);
         }
         return notes;
+    }
+
+    public ArrayList<VideoClass> getVideosFor(UUID puuid)
+    {
+        SQLiteDatabase db = dbSchema.getWritableDatabase();
+        String[] columns = {DatabaseSchema.id, DatabaseSchema.video_name, DatabaseSchema.puuid,
+                DatabaseSchema.video_caption, DatabaseSchema.created_at, DatabaseSchema.modified_at};
+        String[] whereArgs = {String.valueOf(puuid)};
+        Cursor cursor = db.query(DatabaseSchema.VIDEO_TABLE_NAME, columns, DatabaseSchema.puuid + " =?", whereArgs, null, null, null);
+        ArrayList<VideoClass> videos = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            VideoClass video = new VideoClass();
+            video.video_name = cursor.getString(cursor.getColumnIndex(DatabaseSchema.video_name));
+            video.puuid = UUID.fromString(cursor.getString(cursor.getColumnIndex(DatabaseSchema.puuid)));
+            video.video_caption = cursor.getString(cursor.getColumnIndex(DatabaseSchema.video_caption));
+            video.created_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.created_at));
+            video.modified_at = cursor.getString(cursor.getColumnIndex(DatabaseSchema.modified_at));
+            videos.add(video);
+        }
+
+        return videos;
     }
 
     public ArrayList<ImageClass> getImagesFor(UUID puuid)
@@ -343,6 +385,7 @@ public class NoteDatabaseAdapter {
         private static final String NOTES_TABLE_NAME = "notes";
         private static final String PEOPLE_TABLE_NAME = "people";
         private static final String IMAGE_TABLE_NAME = "images";
+        private static final String VIDEO_TABLE_NAME = "videos";
         private static final int DATABASE_VERSION = 1;
         // Column names
         private static final String id = "_id";
@@ -352,8 +395,19 @@ public class NoteDatabaseAdapter {
         private static final String name = "name";
         private static final String image_name = "image_name";
         private static final String image_caption = "image_caption";
+        private static final String video_name = "video_name";
+        private static final String video_caption = "video_caption";
         private static final String created_at = "created_at";
         private static final String modified_at = "modified_at";
+
+        private static final String CREATE_VIDEO_TABLE = "CREATE TABLE "+
+                VIDEO_TABLE_NAME+" ("+
+                id+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                video_name+" VARCHAR(255), "+
+                puuid+" VARCHAR(255), "+
+                video_caption+" VARCHAR(255), "+
+                created_at+" VARCHAR(255), "+
+                modified_at+" VARCHAR(255));";
 
         private static final String CREATE_IMAGE_TABLE = "CREATE TABLE "+
                 IMAGE_TABLE_NAME+" ("+
@@ -383,6 +437,7 @@ public class NoteDatabaseAdapter {
         private static final String DROP_NOTES_TABLE = "DROP TABLE IF EXISTS "+NOTES_TABLE_NAME;
         private static final String DROP_PEOPLE_TABLE = "DROP TABLE IF EXISTS "+PEOPLE_TABLE_NAME;
         private static final String DROP_IMAGE_TABLE = "DROP TABLE IF EXISTS "+IMAGE_TABLE_NAME;
+        private static final String DROP_VIDEO_TABLE = "DROP TABLE IF EXISTS "+VIDEO_TABLE_NAME;
         private Context context;
 
         public DatabaseSchema(Context context) {
@@ -396,6 +451,7 @@ public class NoteDatabaseAdapter {
             db.execSQL(CREATE_NOTES_TABLE);
             db.execSQL(CREATE_PEOPLE_TABLE);
             db.execSQL(CREATE_IMAGE_TABLE);
+            db.execSQL(CREATE_VIDEO_TABLE);
             Log.d("CONRAD", "onCreate is called");
             newDatabase = true;
         }
@@ -412,6 +468,7 @@ public class NoteDatabaseAdapter {
             db.execSQL(DROP_NOTES_TABLE);
             db.execSQL(DROP_PEOPLE_TABLE);
             db.execSQL(DROP_IMAGE_TABLE);
+            db.execSQL(DROP_VIDEO_TABLE);
             Log.d("CONRAD", "onUpdate is called");
             onCreate(db);
         }

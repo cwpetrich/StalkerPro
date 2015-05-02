@@ -107,15 +107,6 @@ public class ViewNotes extends ActionBarActivity {
             startActivityForResult(intent, 1);
 
         }
-        if(id == R.id.action_new_recording) {
-            Intent intent = new Intent(this, SoundRecording.class);
-            Bundle b = new Bundle();
-            b.putString("puuid",puuid.toString());
-            intent.putExtras(b);
-            startActivityForResult(intent, 1);
-        }
-
-
 
         if(id == R.id.action_new_picture){
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
