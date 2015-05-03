@@ -14,11 +14,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.VideoView;
 
 import java.io.File;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -27,6 +24,7 @@ public class ViewNotes extends ActionBarActivity {
     private UUID puuid;
     private File imageFile;
     private ImageClass imageClass;
+    private VideoClass videoClass;
 
     public void updateView(){
         LinearLayout ll = (LinearLayout)findViewById(R.id.notesContainer);
@@ -47,11 +45,24 @@ public class ViewNotes extends ActionBarActivity {
                     Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/"
                     ,images.get(i).image_name);
             if(f.exists()){
-                ImageViewer img = new ImageViewer();
+                ImageFragment img = new ImageFragment();
                 img.giveImageData(f,images.get(i));
                 ft.add(R.id.notesContainer,img);
             }else{
                 Home.getDatabase().deleteImageRow(images.get(i).image_name);
+            }
+        }
+        ArrayList<VideoClass> videos = Home.getDatabase().getVideosFor(puuid);
+        for(int i = 0; i < videos.size(); i++){
+            File f = new File(
+                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/"
+                    ,videos.get(i).video_name);
+            if(f.exists()){
+                VideoFragment vid = new VideoFragment();
+                vid.giveVideoData(f, videos.get(i));
+                ft.add(R.id.notesContainer,vid);
+            }else{
+                Home.getDatabase().deleteImageRow(videos.get(i).video_name);
             }
         }
         ft.commit();
@@ -161,10 +172,22 @@ public class ViewNotes extends ActionBarActivity {
             updateView();
         }
         if(requestCode == 2){
-            Uri videoUri = data.getData();
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(videoUri,"video/*");
-            startActivity(intent);
+            switch (requestCode){
+                case Activity.RESULT_OK:
+                    Uri videoUri = data.getData();
+                    videoClass = new VideoClass();
+                    videoClass.puuid = puuid;
+                    videoClass.video_name = videoUri.getLastPathSegment();
+                    long response = Home.getDatabase().insertVideo(videoClass);
+                    if(response == -1){
+                        Home.makeToast("Failed to insert video to database.");
+                    }else{
+                        Home.makeToast("Sucessfully saved video to database.");
+                    }
+                    break;
+                case Activity.RESULT_CANCELED:
+                    break;
+            }
         }
     }
 }

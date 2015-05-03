@@ -15,11 +15,11 @@ import java.io.File;
 import java.net.URI;
 
 
-public class ImageViewer extends Fragment {
+public class ImageFragment extends Fragment {
     File imageFile;
     ImageClass info;
 
-    public ImageViewer() {
+    public ImageFragment() {
         // Required empty public constructor
     }
 
