@@ -54,16 +54,9 @@ public class ViewNotes extends ActionBarActivity {
         }
         ArrayList<VideoClass> videos = Home.getDatabase().getVideosFor(puuid);
         for(int i = 0; i < videos.size(); i++){
-            File f = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/"
-                    ,videos.get(i).video_name);
-            if(f.exists()){
-                VideoFragment vid = new VideoFragment();
-                vid.giveVideoData(f, videos.get(i));
-                ft.add(R.id.notesContainer,vid);
-            }else{
-                Home.getDatabase().deleteImageRow(videos.get(i).video_name);
-            }
+            VideoFragment vid = new VideoFragment();
+            vid.giveVideoData(videos.get(i));
+            ft.add(R.id.notesContainer,vid);
         }
         ft.commit();
     }
