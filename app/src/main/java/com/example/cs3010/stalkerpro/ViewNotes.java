@@ -165,7 +165,7 @@ public class ViewNotes extends ActionBarActivity {
             updateView();
         }
         if(requestCode == 2){
-            switch (requestCode){
+            switch (resultCode){
                 case Activity.RESULT_OK:
                     Uri videoUri = data.getData();
                     videoClass = new VideoClass();
