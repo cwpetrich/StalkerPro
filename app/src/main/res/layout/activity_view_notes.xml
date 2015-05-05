@@ -24,7 +24,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Empty...\nYou call yourself a stalker?"
+                android:text="Empty...\nYou call yourself a stalker?\n\nClick on 'note' for text, \nClick on 'record' for video,\nand 'photo' for an image!"
                 android:visibility="gone"/>
 
             <View
