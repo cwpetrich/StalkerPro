@@ -42,7 +42,7 @@ public class noteViewFragment extends Fragment {
         TextView t = (TextView)view.findViewById(R.id.noteData);
         t.setText(note.note);
         TextView s = (TextView)view.findViewById(R.id.noteDate);
-        s.setText(note.modified_at.toString());
+        s.setText("Made at:  " + note.modified_at);
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
