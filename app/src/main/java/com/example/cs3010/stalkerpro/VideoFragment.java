@@ -10,14 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.VideoView;
 
 import java.io.File;
 
 
 public class VideoFragment extends Fragment {
     VideoClass data;
-    Uri fileuri;
-    File file;
+    File videoFile;
 
     public VideoFragment() {
         // Required empty public constructor
@@ -29,40 +29,45 @@ public class VideoFragment extends Fragment {
 
     }
 
-    public void giveVideoData(VideoClass vc){
-        data = vc;
-        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES),data.video_name);
-        fileuri = Uri.fromFile(file);
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video, container, false);
-        Button watch = (Button) view.findViewById(R.id.watchVideo);
-        Button delete = (Button) view.findViewById(R.id.deleteVideo);
+        Button videoView = (Button) view.findViewById(R.id.videoView);
 
-        watch.setOnClickListener(new View.OnClickListener() {
+        videoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(fileuri != null) {
+                if(Uri.fromFile(videoFile) != null) {
                     Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setDataAndType(fileuri, "video/*");
+                    intent.setDataAndType(Uri.fromFile(videoFile), "video/*");
                     startActivity(intent);
                 }
             }
         });
+
+        Button delete = (Button) view.findViewById(R.id.deleteVideo);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                file.delete();
-                Home.getDatabase().deleteVideoRow(data.video_name);
+                videoFile.delete();
+                long return_val = Home.getDatabase().deleteVideoRow(data.video_name);
+                if (return_val == -1){
+                    Home.makeToast("Error deleting from database.");
+                }else{
+                    Home.makeToast("Successfully deleted from database.");
+                }
                 ViewNotes notesview = (ViewNotes) getActivity();
                 notesview.updateView();
             }
         });
         // Inflate the layout for this fragment
         return view;
+    }
+
+    public void giveVideoData(VideoClass vc){
+        data = vc;
+        videoFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/",data.video_name);
     }
 
 }

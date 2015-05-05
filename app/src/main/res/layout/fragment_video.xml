@@ -4,12 +4,11 @@
     tools:context="com.example.cs3010.stalkerpro.VideoFragment"
     android:orientation="vertical">
 
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Watch Video"
-        android:id="@+id/watchVideo" />
+        android:id="@+id/videoView" />
 
     <Button
         style="?android:attr/buttonStyleSmall"

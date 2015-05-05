@@ -23,6 +23,7 @@ import java.util.UUID;
 public class ViewNotes extends ActionBarActivity {
     private UUID puuid;
     private File imageFile;
+    private File videoFile;
     private ImageClass imageClass;
     private VideoClass videoClass;
 
@@ -41,9 +42,7 @@ public class ViewNotes extends ActionBarActivity {
         }
         ArrayList<ImageClass> images = Home.getDatabase().getImagesFor(puuid);
         for(int i = 0; i < images.size(); i++){
-            File f = new File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/"
-                    ,images.get(i).image_name);
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", images.get(i).image_name);
             if(f.exists()){
                 ImageFragment img = new ImageFragment();
                 img.giveImageData(f,images.get(i));
@@ -54,9 +53,15 @@ public class ViewNotes extends ActionBarActivity {
         }
         ArrayList<VideoClass> videos = Home.getDatabase().getVideosFor(puuid);
         for(int i = 0; i < videos.size(); i++){
-            VideoFragment vid = new VideoFragment();
-            vid.giveVideoData(videos.get(i));
-            ft.add(R.id.notesContainer,vid);
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", videos.get(i).video_name);
+            if (f.exists()) {
+                VideoFragment vid = new VideoFragment();
+                vid.giveVideoData(videos.get(i));
+                ft.add(R.id.notesContainer, vid);
+            }else{
+                Home.makeToast("Deleting Video from Database.");
+                Home.getDatabase().deleteVideoRow(videos.get(i).video_name);
+            }
         }
         ft.commit();
     }
@@ -115,6 +120,12 @@ public class ViewNotes extends ActionBarActivity {
 
         if(id == R.id.action_new_recording) {
             Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+            videoClass = new VideoClass();
+            videoClass.puuid = puuid;
+            videoFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", videoClass.video_name);
+            Uri tempuri = Uri.fromFile(videoFile);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
+            takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
             if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(takeVideoIntent, 2);
             }
@@ -123,12 +134,14 @@ public class ViewNotes extends ActionBarActivity {
         if(id == R.id.action_new_picture){
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             imageClass = new ImageClass();
-            imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/",
-                    imageClass.image_name);
+            imageClass.puuid = puuid;
+            imageFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", imageClass.image_name);
             Uri tempuri = Uri.fromFile(imageFile);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, tempuri);
-            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0);
-            startActivityForResult(intent,0);
+            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 0);
+            if (intent.resolveActivity(getPackageManager()) != null){
+                startActivityForResult(intent, 0);
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -167,20 +180,17 @@ public class ViewNotes extends ActionBarActivity {
         if(requestCode == 2){
             switch (resultCode){
                 case Activity.RESULT_OK:
-                    Uri videoUri = data.getData();
-                    videoClass = new VideoClass();
-                    videoClass.puuid = puuid;
-                    videoClass.video_name = videoUri.getLastPathSegment();
-                    long response = Home.getDatabase().insertVideo(videoClass);
-                    if(response == -1){
-                        Home.makeToast("Failed to insert video to database.");
+                    if(videoFile.exists()) {
+                        Home.makeToast(videoFile.getName());
+                        Home.getDatabase().insertVideo(videoClass);
                     }else{
-                        Home.makeToast("Sucessfully saved video to database.");
+                        Home.makeToast("Error Saving File");
                     }
                     break;
                 case Activity.RESULT_CANCELED:
                     break;
             }
+            updateView();
         }
     }
 }

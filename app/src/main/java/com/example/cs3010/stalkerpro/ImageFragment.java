@@ -39,7 +39,7 @@ public class ImageFragment extends Fragment {
             //Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
             //i.setImageBitmap(bitmap);
             i.setImageURI(Uri.fromFile(imageFile));
-            i.setRotation(90);
+            i.setRotation(0);
             i.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         }
 
