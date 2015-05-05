@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.io.File;
 import java.net.URI;
@@ -34,7 +35,7 @@ public class ImageFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_image_viewer,container,false);
         // Inflate the layout for this fragment
-        ImageView i = (ImageView) view.findViewById(R.id.imageView);
+        ImageView i = (ImageView) view.findViewById(R.id.imageFragImageView);
         if(imageFile != null && imageFile.exists()){
             //Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
             //i.setImageBitmap(bitmap);
@@ -43,7 +44,7 @@ public class ImageFragment extends Fragment {
             i.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_LOW);
         }
 
-        Button b = (Button) view.findViewById(R.id.button);
+        Button b = (Button) view.findViewById(R.id.imageFragDeleteButton);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,6 +54,9 @@ public class ImageFragment extends Fragment {
                 vn.updateView();
             }
         });
+
+        TextView timeStamp = (TextView) view.findViewById(R.id.imageFragTimeStamp);
+        timeStamp.setText("Taken at:  " + info.created_at);
 
         return view;
     }

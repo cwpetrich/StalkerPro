@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import java.io.File;
@@ -33,7 +34,7 @@ public class VideoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_video, container, false);
-        Button videoView = (Button) view.findViewById(R.id.videoView);
+        Button videoView = (Button) view.findViewById(R.id.videoFragPlayButton);
 
         videoView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +47,7 @@ public class VideoFragment extends Fragment {
             }
         });
 
-        Button delete = (Button) view.findViewById(R.id.deleteVideo);
+        Button delete = (Button) view.findViewById(R.id.videoFragDeleteButton);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,6 +62,9 @@ public class VideoFragment extends Fragment {
                 notesview.updateView();
             }
         });
+
+        TextView timeStamp = (TextView) view.findViewById(R.id.videoFragTimeStamp);
+        timeStamp.setText("Taken at:  " + data.created_at);
         // Inflate the layout for this fragment
         return view;
     }

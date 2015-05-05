@@ -4,17 +4,30 @@
     tools:context="com.example.cs3010.stalkerpro.VideoFragment"
     android:orientation="vertical">
 
-    <Button
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Watch Video"
-        android:id="@+id/videoView" />
+        android:id="@+id/videoFragButtonLayout">
+        <Button
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:text="Watch Video"
+            android:id="@+id/videoFragPlayButton" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Delete"
+            android:id="@+id/videoFragDeleteButton"
+            android:layout_gravity="right" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Delete"
-        android:id="@+id/deleteVideo"
-        android:layout_gravity="right" />
+        android:id="@+id/videoFragTimeStamp"
+        android:text="time stamp"/>
 </LinearLayout>
