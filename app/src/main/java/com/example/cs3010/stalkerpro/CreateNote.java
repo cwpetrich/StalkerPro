@@ -117,7 +117,7 @@ public class CreateNote extends ActionBarActivity {
     }
 
     public void saveNote(){
-        finish();
+        onBackPressed();
     }
 
     public void printDB(View view)

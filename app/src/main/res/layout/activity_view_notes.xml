@@ -15,8 +15,94 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/notesContainer"></LinearLayout>
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/notesListContainer">
+
+            <TextView
+                android:id="@+id/emptyNotesList"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Empty...\nYou call yourself a stalker?"
+                android:visibility="gone"/>
+
+            <View
+                android:id="@+id/textNotesContainerBoarder"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#000000"/>
+
+            <TextView
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textNotesContainerTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:background="#dddddd"
+                android:textStyle="bold"
+                android:text="Text Notes:" />
+
+            <LinearLayout
+                android:paddingBottom="30dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textNotesContainer"></LinearLayout>
+
+            <View
+                android:id="@+id/imageNotesContainerBoarder"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#000000"/>
+
+            <TextView
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageNotesContainerTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:background="#dddddd"
+                android:textStyle="bold"
+                android:text="Image Notes:" />
+
+            <LinearLayout
+                android:paddingBottom="30dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageNotesContainer"></LinearLayout>
+
+            <View
+                android:id="@+id/videoNotesContainerBoarder"
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="#000000"/>
+
+            <TextView
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/videoNotesContainerTitle"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:background="#dddddd"
+                android:textStyle="bold"
+                android:text="Video Notes:" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/videoNotesContainer"></LinearLayout>
+
+        </LinearLayout>
+
     </ScrollView>
+
 </RelativeLayout>

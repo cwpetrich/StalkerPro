@@ -15,11 +15,11 @@ import android.widget.TextView;
 import java.util.UUID;
 
 
-public class nameFragment extends Fragment {
+public class NameFragment extends Fragment {
     String name;
     private UUID puuid;
 
-    public nameFragment() {
+    public NameFragment() {
         // Required empty public constructor
     }
 

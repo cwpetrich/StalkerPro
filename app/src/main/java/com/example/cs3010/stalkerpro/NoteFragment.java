@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import java.util.zip.Inflater;
 
-public class noteViewFragment extends Fragment {
+public class NoteFragment extends Fragment {
     private Note note;
 
-    public noteViewFragment() {
+    public NoteFragment() {
         // Required empty public constructor
     }
 

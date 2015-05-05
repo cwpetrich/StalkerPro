@@ -1,21 +1,15 @@
 package com.example.cs3010.stalkerpro;
 
 
-import android.app.ActionBar;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -55,7 +49,7 @@ public class Home extends ActionBarActivity {
         FragmentManager fm = main.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         for (int i = 0; i < list.size(); i++) {
-            nameFragment nf = new nameFragment();
+            NameFragment nf = new NameFragment();
             nf.setName(list.get(i).name);
             nf.setPuuid(list.get(i).puuid);
             ft.add(R.id.namesContainer, nf);

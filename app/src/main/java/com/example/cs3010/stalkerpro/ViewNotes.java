@@ -13,7 +13,9 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -27,45 +29,6 @@ public class ViewNotes extends ActionBarActivity {
     private ImageClass imageClass;
     private VideoClass videoClass;
 
-    public void updateView(){
-        LinearLayout ll = (LinearLayout)findViewById(R.id.notesContainer);
-        ll.removeAllViews();
-        NoteDatabaseAdapter db = Home.getDatabase();
-        ArrayList<Note> notes = db.getNotesFor(puuid);
-        FragmentManager fm = getFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        for(int i = 0; i < notes.size(); i++){
-            Note n = notes.get(i);
-            noteViewFragment nv = new noteViewFragment();
-            nv.giveNote(n);
-            ft.add(R.id.notesContainer,nv);
-        }
-        ArrayList<ImageClass> images = Home.getDatabase().getImagesFor(puuid);
-        for(int i = 0; i < images.size(); i++){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", images.get(i).image_name);
-            if(f.exists()){
-                ImageFragment img = new ImageFragment();
-                img.giveImageData(f,images.get(i));
-                ft.add(R.id.notesContainer,img);
-            }else{
-                Home.getDatabase().deleteImageRow(images.get(i).image_name);
-            }
-        }
-        ArrayList<VideoClass> videos = Home.getDatabase().getVideosFor(puuid);
-        for(int i = 0; i < videos.size(); i++){
-            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", videos.get(i).video_name);
-            if (f.exists()) {
-                VideoFragment vid = new VideoFragment();
-                vid.giveVideoData(videos.get(i));
-                ft.add(R.id.notesContainer, vid);
-            }else{
-                Home.makeToast("Deleting Video from Database.");
-                Home.getDatabase().deleteVideoRow(videos.get(i).video_name);
-            }
-        }
-        ft.commit();
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +40,89 @@ public class ViewNotes extends ActionBarActivity {
         String n = b.getString("name");
         setTitle(n);
         updateView();
+    }
+
+    public void updateView(){
+        LinearLayout tll = (LinearLayout)findViewById(R.id.textNotesContainer);
+        LinearLayout ill = (LinearLayout) findViewById(R.id.imageNotesContainer);
+        LinearLayout vll = (LinearLayout) findViewById(R.id.videoNotesContainer);
+        tll.removeAllViews();
+        ill.removeAllViews();
+        vll.removeAllViews();
+        NoteDatabaseAdapter db = Home.getDatabase();
+        ArrayList<Note> notes = db.getNotesFor(puuid);
+        ArrayList<ImageClass> images = db.getImagesFor(puuid);
+        ArrayList<VideoClass> videos = db.getVideosFor(puuid);
+
+        if(notes.size() <= 0){
+            tll.setVisibility(View.GONE);
+            findViewById(R.id.textNotesContainerTitle).setVisibility(View.GONE);
+            findViewById(R.id.textNotesContainerBoarder).setVisibility(View.GONE);
+        }else{
+            tll.setVisibility(View.VISIBLE);
+            findViewById(R.id.textNotesContainerTitle).setVisibility(View.VISIBLE);
+            findViewById(R.id.textNotesContainerBoarder).setVisibility(View.VISIBLE);
+        }
+        if(images.size() <= 0){
+            ill.setVisibility(View.GONE);
+            findViewById(R.id.imageNotesContainerTitle).setVisibility(View.GONE);
+            findViewById(R.id.imageNotesContainerBoarder).setVisibility(View.GONE);
+        }else{
+            ill.setVisibility(View.VISIBLE);
+            findViewById(R.id.imageNotesContainerTitle).setVisibility(View.VISIBLE);
+            findViewById(R.id.imageNotesContainerBoarder).setVisibility(View.VISIBLE);
+        }
+        if(videos.size() <= 0){
+            vll.setVisibility(View.GONE);
+            findViewById(R.id.videoNotesContainerTitle).setVisibility(View.GONE);
+            findViewById(R.id.videoNotesContainerBoarder).setVisibility(View.GONE);
+        }else{
+            vll.setVisibility(View.VISIBLE);
+            findViewById(R.id.videoNotesContainerTitle).setVisibility(View.VISIBLE);
+            findViewById(R.id.videoNotesContainerBoarder).setVisibility(View.VISIBLE);
+        }
+        if(notes.size() <= 0 && images.size() <= 0 && videos.size() <= 0) {
+            findViewById(R.id.emptyNotesList).setVisibility(View.VISIBLE);
+        }else{
+            findViewById(R.id.emptyNotesList).setVisibility(View.GONE);
+        }
+
+        FragmentManager fm = getFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+
+
+        for(int i = 0; i < notes.size(); i++){
+            Note n = notes.get(i);
+            NoteFragment nv = new NoteFragment();
+            nv.giveNote(n);
+            ft.add(R.id.textNotesContainer,nv);
+        }
+
+
+        for(int i = 0; i < images.size(); i++){
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/StalkerPro/", images.get(i).image_name);
+            if(f.exists()){
+                ImageFragment img = new ImageFragment();
+                img.giveImageData(f,images.get(i));
+                ft.add(R.id.imageNotesContainer,img);
+            }else{
+                Home.getDatabase().deleteImageRow(images.get(i).image_name);
+            }
+        }
+
+        for (int i = 0; i < videos.size(); i++) {
+            File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/StalkerPro/", videos.get(i).video_name);
+            if (f.exists()) {
+                VideoFragment vid = new VideoFragment();
+                vid.giveVideoData(videos.get(i));
+                ft.add(R.id.videoNotesContainer, vid);
+            } else {
+                Home.makeToast("Deleting Video from Database.");
+                Home.getDatabase().deleteVideoRow(videos.get(i).video_name);
+            }
+        }
+
+        ft.commit();
     }
 
 
