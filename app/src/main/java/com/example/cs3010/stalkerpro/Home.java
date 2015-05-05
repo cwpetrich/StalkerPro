@@ -3,13 +3,19 @@ package com.example.cs3010.stalkerpro;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -17,8 +23,12 @@ import java.util.ArrayList;
 
 
 public class Home extends ActionBarActivity {
+    public EditText searchText;
+    public ArrayList<Person> list;
+    public ArrayList<Person> people;
     public static Home main;
     private static NoteDatabaseAdapter DB;
+    private final Context context = this;
 
     public static NoteDatabaseAdapter getDatabase(){
         return DB;
@@ -45,9 +55,49 @@ public class Home extends ActionBarActivity {
     private void updateView() {
         LinearLayout ll = (LinearLayout) findViewById(R.id.namesContainer);
         ll.removeAllViews();
-        ArrayList<Person> list = DB.getPeople();
+
+        list = DB.getPeople();
+
+        searchText = (EditText) findViewById(R.id.homeSearchBox);
+        searchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                people = DB.getPeople(s.toString());
+                LinearLayout searchResults = (LinearLayout) findViewById(R.id.homeSearchResultsList);
+                searchResults.removeAllViews();
+                for (int i = 0; i < people.size(); i++) {
+                    final Person person = people.get(i);
+                    TextView tv = new TextView(context);
+                    tv.setText(person.name);
+                    tv.setTextSize((float) 25.0);
+                    tv.setPadding(0, 0, 0, 5);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(context, ViewNotes.class);
+                            Bundle b = new Bundle();
+                            b.putString("uuid",person.puuid.toString());
+                            b.putString("name",person.name);
+                            intent.putExtras(b);
+                            startActivityForResult(intent, 1);
+                        }
+                    });
+                    searchResults.addView(tv);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         FragmentManager fm = main.getFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
+
         for (int i = 0; i < list.size(); i++) {
             NameFragment nf = new NameFragment();
             nf.setName(list.get(i).name);
@@ -90,6 +140,13 @@ public class Home extends ActionBarActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        if (id == R.id.action_search) {
+            if (findViewById(R.id.homeSearchContainer).getVisibility() == View.GONE){
+                findViewById(R.id.homeSearchContainer).setVisibility(View.VISIBLE);
+            }else{
+                findViewById(R.id.homeSearchContainer).setVisibility(View.GONE);
+            }
         }
         if (id == R.id.action_quickNote) {
             Intent intent = new Intent(this, CreateNote.class);
