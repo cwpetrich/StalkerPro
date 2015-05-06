@@ -47,7 +47,6 @@ public class NameFragment extends Fragment {
                 b.putString("name",name);
                 intent.putExtras(b);
                 getActivity().startActivityForResult(intent,1);
-
             }
         });
         // Inflate the layout for this fragment
