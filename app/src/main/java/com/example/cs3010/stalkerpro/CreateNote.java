@@ -86,23 +86,27 @@ public class CreateNote extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPeople = databaseAdapter.getPeople(s.toString());
                 LinearLayout searchResults = (LinearLayout) findViewById(R.id.createNoteSearchResultsList);
-                searchResults.removeAllViews();
-                for (int i = 0; i < mPeople.size(); i++) {
-                    final Person person = mPeople.get(i);
-                    TextView tv = new TextView(context);
-                    tv.setText(person.name);
-                    tv.setTextSize((float) 25.0);
-                    tv.setPadding(0, 0, 0, 5);
-                    tv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            searchText.setText(person.name);
-                            databaseAdapter.updateNotePuuid(mNote.nuuid, person.puuid);
-                        }
-                    });
-                    searchResults.addView(tv);
+                if (s.toString().length() >= 1){
+                    mPeople = databaseAdapter.getPeople(s.toString());
+                    searchResults.removeAllViews();
+                    for (int i = 0; i < mPeople.size(); i++) {
+                        final Person person = mPeople.get(i);
+                        TextView tv = new TextView(context);
+                        tv.setText(person.name);
+                        tv.setTextSize((float) 25.0);
+                        tv.setPadding(0, 0, 0, 5);
+                        tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                searchText.setText(person.name);
+                                databaseAdapter.updateNotePuuid(mNote.nuuid, person.puuid);
+                            }
+                        });
+                        searchResults.addView(tv);
+                    }
+                }else{
+                    searchResults.removeAllViews();
                 }
             }
 

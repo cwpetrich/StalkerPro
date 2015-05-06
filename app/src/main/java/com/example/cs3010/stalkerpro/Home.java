@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -66,27 +67,33 @@ public class Home extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                people = DB.getPeople(s.toString());
                 LinearLayout searchResults = (LinearLayout) findViewById(R.id.homeSearchResultsList);
-                searchResults.removeAllViews();
-                for (int i = 0; i < people.size(); i++) {
-                    final Person person = people.get(i);
-                    TextView tv = new TextView(context);
-                    tv.setText(person.name);
-                    tv.setTextSize((float) 25.0);
-                    tv.setPadding(0, 0, 0, 5);
-                    tv.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(context, ViewNotes.class);
-                            Bundle b = new Bundle();
-                            b.putString("uuid",person.puuid.toString());
-                            b.putString("name",person.name);
-                            intent.putExtras(b);
-                            startActivityForResult(intent, 1);
-                        }
-                    });
-                    searchResults.addView(tv);
+                if (s.toString().length() >= 1) {
+                    Log.d("CONRAD", s.toString());
+                    people = DB.getPeople(s.toString());
+                    searchResults.removeAllViews();
+                    for (int i = 0; i < people.size(); i++) {
+                        final Person person = people.get(i);
+                        TextView tv = new TextView(context);
+                        tv.setText(person.name);
+                        tv.setTextSize((float) 25.0);
+                        tv.setPadding(0, 0, 0, 5);
+                        tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(context, ViewNotes.class);
+                                Bundle b = new Bundle();
+                                b.putString("uuid", person.puuid.toString());
+                                b.putString("name", person.name);
+                                intent.putExtras(b);
+                                startActivityForResult(intent, 1);
+                            }
+                        });
+                        searchResults.addView(tv);
+                    }
+                }else{
+                    Log.d("CONRAD", s.toString());
+                    searchResults.removeAllViews();
                 }
             }
 
