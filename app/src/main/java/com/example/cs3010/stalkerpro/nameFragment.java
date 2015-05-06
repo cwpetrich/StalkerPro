@@ -26,7 +26,6 @@ public class NameFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     public void setName(String n){
@@ -54,5 +53,4 @@ public class NameFragment extends Fragment {
         // Inflate the layout for this fragment
         return nameView;
     }
-
 }
